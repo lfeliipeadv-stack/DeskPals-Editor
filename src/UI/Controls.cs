@@ -734,6 +734,8 @@ namespace PetEditor
 		protected override void OnMouseMove(MouseEventArgs e) { int h = Hit(e.Location); if (h != hover) { hover = h; Cursor = h >= 0 ? Cursors.Hand : Cursors.Default; Invalidate(); } }
 		protected override void OnMouseLeave(EventArgs e) { hover = -1; Invalidate(); }
 		protected override void OnMouseClick(MouseEventArgs e) { int h = Hit(e.Location); if (h >= 0) { Selected = h; Invalidate(); FrameClicked?.Invoke(h); } }
+		/// <summary>As a click on frame <paramref name="i"/> (the pictures of the wiki drive the windows with it).</summary>
+		public void ClickFrame(int i) { if (i < 0 || i >= Count) return; Selected = i; Invalidate(); FrameClicked?.Invoke(i); }
 		protected override void OnScroll(ScrollEventArgs se) { base.OnScroll(se); Invalidate(); }
 		protected override void OnMouseWheel(MouseEventArgs e) { base.OnMouseWheel(e); Invalidate(); }
 

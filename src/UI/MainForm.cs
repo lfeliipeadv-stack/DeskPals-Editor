@@ -24,7 +24,7 @@ namespace PetEditor
 	/// The editor window: header with the file actions and "Test on the desktop", the side bar with the sections,
 	/// and the page of the chosen section.
 	/// </summary>
-	internal sealed class MainForm : Form
+	internal sealed partial class MainForm : Form
 	{
 		public PetDoc Doc { get; private set; }
 		readonly NavBar nav = new();
@@ -66,6 +66,7 @@ namespace PetEditor
 				Application.Idle += FirstIdle;
 				void FirstIdle(object o2, EventArgs e2) { Application.Idle -= FirstIdle; Timing.Mark("first idle (window ready)"); }
 				if (Program.SnapDir != null) { BeginInvoke(new Action(async () => await Snap(Program.SnapDir))); return; }
+				if (Program.WikiDir != null) { BeginInvoke(new Action(async () => await WikiShots(Program.WikiDir))); return; }
 				BeginInvoke(new Action(() => { OfferRecovery(); if (!s.TourDone) Tour.Start(this); }));
 			};
 			// a copy of the changes every minute: brought back if the editor closes without saving

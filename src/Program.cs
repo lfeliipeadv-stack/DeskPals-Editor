@@ -5,6 +5,8 @@ namespace PetEditor
 	internal static class Program
 	{
 		public static string SnapDir;
+		/// <summary>Developer: "--wikishots=<folder>", the pictures of the wiki (every page, window and state), then close.</summary>
+		public static string WikiDir;
 		public static System.Drawing.Size SnapSize;
 		/// <summary>The page to show at the start ("--page=settings": the editor opened again after a change of size).</summary>
 		public static string StartPage => Environment.GetCommandLineArgs().FirstOrDefault(a => a.StartsWith("--page="))?.Substring(7);
@@ -27,7 +29,7 @@ namespace PetEditor
 			Application.ThreadException += (o, e) =>
 			{
 				// taking the pictures nobody is there to close a message: the error goes to a file
-				if (SnapDir != null) { try { Directory.CreateDirectory(SnapDir); File.AppendAllText(Path.Combine(SnapDir, "erros.txt"), e.Exception + Environment.NewLine); } catch { } return; }
+				if ((SnapDir ?? WikiDir) != null) { try { Directory.CreateDirectory(SnapDir ?? WikiDir); File.AppendAllText(Path.Combine(SnapDir ?? WikiDir, "erros.txt"), e.Exception + Environment.NewLine); } catch { } return; }
 				MessageBox.Show(L.T("msg.openFail", e.Exception.Message), L.T("app.name"), MessageBoxButtons.OK, MessageBoxIcon.Error);
 			};
 			// developer: every pet of a folder read and written again must stay the same ("--roundtrip=C:\Pets")
@@ -59,6 +61,7 @@ namespace PetEditor
 			string open = args.FirstOrDefault(a => !a.StartsWith("--") && (File.Exists(a) || Directory.Exists(a)));
 			// developer: a picture of every page, light and dark, in this folder ("--snap=C:\folder"), then it closes
 			SnapDir = args.FirstOrDefault(a => a.StartsWith("--snap="))?.Substring(7);
+			WikiDir = args.FirstOrDefault(a => a.StartsWith("--wikishots="))?.Substring(12);
 			var size = args.FirstOrDefault(a => a.StartsWith("--snapsize="))?.Substring(11).Split('x');
 			if (size?.Length == 2) SnapSize = new System.Drawing.Size(int.Parse(size[0]), int.Parse(size[1]));
 			var form = new MainForm(open); Timing.Mark("window built");

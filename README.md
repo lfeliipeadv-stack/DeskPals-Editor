@@ -14,6 +14,8 @@
   &nbsp;·&nbsp;
   <a href="https://github.com/lfeliipeadv-stack/desktop-pet-editor/releases">All releases</a>
   &nbsp;·&nbsp;
+  <a href="wiki/Home.md"><b>📖 Wiki</b></a> (<a href="wiki/pt-BR/Home.md">em português</a>)
+  &nbsp;·&nbsp;
   <a href="https://github.com/lfeliipeadv-stack/meu-pet">DesktopPet, the app that runs the pets</a>
 </p>
 
@@ -23,6 +25,9 @@ A pet is a single `animations.xml` file with its sprite sheet, animations, entra
 The editor opens it, shows every part on its own page and plays the pet in a live preview while you change it — no XML
 by hand. It is made for [DesktopPet](https://github.com/lfeliipeadv-stack/meu-pet) and writes the same `animations.xml`
 format it reads.
+
+The full manual, with a picture of every page and window, is in the **[Wiki](wiki/Home.md)** — also
+[in Portuguese](wiki/pt-BR/Home.md).
 
 ## Features
 
@@ -51,7 +56,7 @@ format it reads.
   and the side bar and the list of animations show how many there are.
 - **Animation map**: every animation as a card with arrows to what comes next.
 - **XML** page with the file as it will be saved (editable).
-- **Test on the desktop**: runs the pet in DesktopPet and reloads it every time you save.
+- **Test on the desktop**: runs the pet in DesktopPet and updates it with every change (no need to save).
 
 **Share it**
 - **Export as .zip**: the pet, its icon, an animated preview and a README, ready to send.

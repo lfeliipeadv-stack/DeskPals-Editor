@@ -16,7 +16,7 @@ namespace PetEditor
 			base.Bind(main, doc);
 			Controls.Clear();
 			var card = new Card { Dock = DockStyle.Fill, Margin = new Padding(0, 0, 0, 14) };
-			var top = new Panel { Dock = DockStyle.Top, Height = 118, BackColor = Theme.Surface };
+			var top = new Panel { Dock = DockStyle.Top, AutoSize = true, AutoSizeMode = AutoSizeMode.GrowAndShrink, Padding = new Padding(0, 0, 0, 4), BackColor = Theme.Surface };
 			var col = Ui.Column(Ui.Title(L.T("chk.title"), 20), Ui.Hint(L.T("chk.intro"), 900));
 			summary = Ui.Text("", false, 14); summary.Font = Ui.Font(14, true);
 			var filters = Ui.Row();

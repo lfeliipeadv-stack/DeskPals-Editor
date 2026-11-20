@@ -29,7 +29,7 @@ namespace PetEditor
 			base.Bind(main, doc);
 			Controls.Clear();
 			var card = new Card { Dock = DockStyle.Fill, Margin = new Padding(0, 0, 0, 14) };
-			var top = new Panel { Dock = DockStyle.Top, Height = 124, BackColor = Theme.Surface };
+			var top = new Panel { Dock = DockStyle.Top, AutoSize = true, AutoSizeMode = AutoSizeMode.GrowAndShrink, Padding = new Padding(0, 0, 0, 4), BackColor = Theme.Surface };
 			var col = Ui.Column(Ui.Title(L.T("xml.title"), 20), Ui.Hint(L.T("xml.intro"), 1000));
 			var apply = new FlatButton(L.T("xml.apply"), primary: true); apply.Click += (s, e) => Apply();
 			var undo = new FlatButton(L.T("xml.discard")); undo.Click += (s, e) => ShowXml();

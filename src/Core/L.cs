@@ -284,7 +284,7 @@ sounds.export|Exportar MP3|Export MP3|Exportar MP3
 
 chk.title|Verificação do pet|Pet check|Verificación de la mascota
 chk.allGood|Tudo certo: nada que atrapalhe o pet.|All good: nothing in the pet's way.|Todo bien: nada que estorbe a la mascota.
-chk.summary|{0} erro(s) e {1} aviso(s). Dê dois cliques para ir até o lugar.|{0} error(s) and {1} warning(s). Double-click to go there.|{0} error(es) y {1} aviso(s). Doble clic para ir al lugar.
+chk.summary|{0} erro(s) e {1} aviso(s). Clique num item para ir até o lugar.|{0} error(s) and {1} warning(s). Click an item to go there.|{0} error(es) y {1} aviso(s). Haga clic en un elemento para ir al lugar.
 chk.formula|{0}: a fórmula “{1}” não funciona ({2}).|{0}: the formula “{1}” does not work ({2}).|{0}: la fórmula “{1}” no funciona ({2}).
 chk.noImage|Falta a folha de sprites.|The sprite sheet is missing.|Falta la hoja de sprites.
 chk.grid|A imagem de {0}×{1} px não se divide em {2} colunas × {3} linhas.|The {0}×{1} px picture does not split into {2} columns × {3} rows.|La imagen de {0}×{1} px no se divide en {2} columnas × {3} filas.

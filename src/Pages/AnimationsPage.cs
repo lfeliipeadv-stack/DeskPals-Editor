@@ -440,7 +440,8 @@ namespace PetEditor
 			top.Controls.AddRange(new Control[] { title, statusLbl });
 			stage = new PreviewStage { Dock = DockStyle.Fill, Doc = Doc };
 			stage.Status += s => { if (!statusLbl.IsDisposed) statusLbl.Text = L.T("preview.playing", s); };
-			var bar = new FlowLayoutPanel { Dock = DockStyle.Bottom, Height = 84, BackColor = Theme.Surface, Padding = new Padding(0, 8, 0, 0), WrapContents = true };
+			// as tall as its rows of buttons, by itself (computed by hand it was sometimes one row too tall and hid the ground)
+			var bar = new FlowLayoutPanel { Dock = DockStyle.Bottom, AutoSize = true, AutoSizeMode = AutoSizeMode.GrowAndShrink, BackColor = Theme.Surface, Padding = new Padding(0, 8, 0, 0), WrapContents = true };
 			// small icon buttons (what each does is in its tooltip) and the switches in a menu: one line in most sizes
 			pauseBtn = Ui.IconButton(PauseGlyph, L.T("preview.pause") + " (" + L.T("key.space") + ")");
 			pauseBtn.Click += (s, e) => { stage.Pause(!stage.Paused); ShowPaused(stage.Paused); };
@@ -467,12 +468,6 @@ namespace PetEditor
 			Option("preview.onion", L.T("tip.preview.onion"), on => { stage.Onion = on; stage.Invalidate(); });
 			options.Click += (s, e) => menu.Show(options, new Point(0, options.Height));
 			bar.Controls.AddRange(new Control[] { pauseBtn, step, skip, again, speed, options });
-			// as tall as its rows of buttons (two when the preview is narrow)
-			bar.Layout += (s, e) =>
-			{
-				int h = bar.Controls.Cast<Control>().Where(c => c.Visible).Select(c => c.Bottom + c.Margin.Bottom).DefaultIfEmpty(0).Max() + 2;
-				if (h > 20 && Math.Abs(bar.Height - h) > 1) bar.Height = h;
-			};
 			stage.Tip(L.T("tip.preview.mouse"));
 			card.Controls.Add(stage);
 			card.Controls.Add(bar);
@@ -493,7 +488,7 @@ namespace PetEditor
 		Control BuildSheet()
 		{
 			var card = new Card { Dock = DockStyle.Fill, Margin = new Padding(0, 0, 0, 14) };
-			var top = new Panel { Dock = DockStyle.Top, Height = 46, BackColor = Theme.Surface };
+			var top = new Panel { Dock = DockStyle.Top, AutoSize = true, AutoSizeMode = AutoSizeMode.GrowAndShrink, Padding = new Padding(0, 0, 0, 4), BackColor = Theme.Surface };
 			var title = Ui.Title(L.T("sheet.title"), 15); title.Location = new Point(0, 0);
 			var hint = Ui.Text(L.T("sheet.clickHint"), true, 12); hint.Location = new Point(0, 24);
 			top.Controls.AddRange(new Control[] { title, hint });

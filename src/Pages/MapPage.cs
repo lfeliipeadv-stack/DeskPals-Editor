@@ -19,7 +19,7 @@ namespace PetEditor
 			base.Bind(main, doc);
 			Controls.Clear();
 			var card = new Card { Dock = DockStyle.Fill, Margin = new Padding(0, 0, 0, 14) };
-			var top = new Panel { Dock = DockStyle.Top, Height = 92, BackColor = Theme.Surface };
+			var top = new Panel { Dock = DockStyle.Top, AutoSize = true, AutoSizeMode = AutoSizeMode.GrowAndShrink, BackColor = Theme.Surface, Padding = new Padding(0, 0, 0, 6) };   // as tall as its texts (the intro breaks its line when narrow)
 			var col = Ui.Column(Ui.Title(L.T("map.title"), 20), Ui.Hint(L.T("map.intro"), 1000));
 			var fit = new FlatButton(L.T("map.fit")); fit.Click += (s, e) => view.Fit();
 			var legend = Ui.Text(L.T("map.legend"), true, 12); legend.Margin = new Padding(12, 8, 0, 0);
