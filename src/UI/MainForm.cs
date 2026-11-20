@@ -66,6 +66,7 @@ namespace PetEditor
 				Application.Idle += FirstIdle;
 				void FirstIdle(object o2, EventArgs e2) { Application.Idle -= FirstIdle; Timing.Mark("first idle (window ready)"); }
 				if (Program.SnapDir != null) { BeginInvoke(new Action(async () => await Snap(Program.SnapDir))); return; }
+				if (Program.DemoDir != null) { BeginInvoke(new Action(async () => await DemoFrames(Program.DemoDir))); return; }
 				if (Program.WikiDir != null) { BeginInvoke(new Action(async () => await WikiShots(Program.WikiDir))); return; }
 				BeginInvoke(new Action(() => { OfferRecovery(); if (!s.TourDone) Tour.Start(this); }));
 			};

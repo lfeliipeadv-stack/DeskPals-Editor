@@ -34,7 +34,8 @@ Spanish column is kept for later). Sizes are written for 100% and grow with the 
 | `--buildsheet=<out.png> <pictures…>` | Builds a sprite sheet from pictures. |
 | `<pet> --snap=<folder>` | A picture of every page and window, light and dark, plus `cortes.txt` with every text or button cut off (or *nenhum corte*) and `erros.txt` if something failed. |
 | `<pet> --wikishots=<folder>` | The pictures of this wiki: pages, windows, the assistant step by step, the checker with problems, the tour. The name of the Windows user and its folder are replaced by neutral words. |
-| `--snapsize=1000x660` | The window size for `--snap` and `--wikishots`. |
+| `<pet> --demoframes=<folder>` | The frames of the animated demo of the README (the assistant making a pet, the pet walking in the preview…) and `frames.txt` with how long each one stays. |
+| `--snapsize=1000x660` | The window size for `--snap`, `--wikishots` and `--demoframes`. |
 | `--scale=1.5` | Another zoom for this run. |
 | `--lang=en` / `--lang=pt` | Another language for this run (the setting does not change). |
 | `--settings=<file>` | Another settings file for this run (clean pictures, tests). |

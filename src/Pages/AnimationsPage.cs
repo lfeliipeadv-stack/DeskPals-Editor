@@ -144,7 +144,7 @@ namespace PetEditor
 				string text = "";
 				if (i >= 0 && i < list.Items.Count && list.Items[i] is AnimationNode a)
 				{
-					text = a.Name + Environment.NewLine + L.T("anim.sub", a.Id, a.Sequence.Frame?.Length ?? 0);
+					text = a.Name + Environment.NewLine + Sub(a);
 					// and what the checker found in it
 					foreach (var p in ProblemsOf(a.Id).Take(5)) text += Environment.NewLine + (p.Error ? "⛔ " : "⚠ ") + p.Text;
 				}
@@ -160,6 +160,9 @@ namespace PetEditor
 			card.Controls.Add(top);
 			return card;
 		}
+
+		/// <summary>"#3 · 4 frames" (one frame: "1 frame").</summary>
+		static string Sub(AnimationNode a) { int n = a.Sequence.Frame?.Length ?? 0; return n == 1 ? L.T("anim.sub1", a.Id) : L.T("anim.sub", a.Id, n); }
 
 		IEnumerable<Validator.Problem> ProblemsOf(int id) => Main?.Problems?.Where(p => p.Anim == id) ?? Enumerable.Empty<Validator.Problem>();
 
@@ -204,7 +207,7 @@ namespace PetEditor
 				TextRenderer.DrawText(g, mark.Value.error ? "⛔" : "⚠", Ui.Font(12), new Rectangle(r.Right - Ui.S(24), r.Y + r.Height / 2 - Ui.S(18), Ui.S(22), Ui.S(20)), mark.Value.error ? Theme.Danger : Ui.Warning, TextFormatFlags.Left);
 			}
 			TextRenderer.DrawText(g, a.Name, Ui.Font(13.5f, sel), new Rectangle(tx, r.Y + r.Height / 2 - Ui.S(18), tw, Ui.S(20)), Theme.Text, TextFormatFlags.Left | TextFormatFlags.EndEllipsis | TextFormatFlags.NoPrefix);
-			string sub = L.T("anim.sub", a.Id, f?.Length ?? 0) + (a.Picker == "no" ? "  ·  " + L.T("anim.hiddenShort") : "");
+			string sub = Sub(a) + (a.Picker == "no" ? "  ·  " + L.T("anim.hiddenShort") : "");
 			TextRenderer.DrawText(g, sub, Ui.Font(11.5f), new Rectangle(tx, r.Y + r.Height / 2 + 1, r.Right - tx - Ui.S(6), Ui.S(18)), Theme.TextMuted, TextFormatFlags.Left | TextFormatFlags.EndEllipsis);
 		}
 

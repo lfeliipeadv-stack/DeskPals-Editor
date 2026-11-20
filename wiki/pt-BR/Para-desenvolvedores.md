@@ -34,7 +34,8 @@ do espanhol fica guardada para depois). Os tamanhos são escritos para 100% e cr
 | `--buildsheet=<saida.png> <imagens…>` | Monta uma folha de sprites a partir de imagens. |
 | `<pet> --snap=<pasta>` | Uma foto de cada página e janela, no tema claro e no escuro, mais o `cortes.txt` com todo texto ou botão cortado (ou *nenhum corte*) e o `erros.txt` se algo falhou. |
 | `<pet> --wikishots=<pasta>` | As fotos deste wiki: páginas, janelas, o assistente passo a passo, o verificador com problemas, o tour. O nome do usuário do Windows e a pasta dele viram palavras neutras. |
-| `--snapsize=1000x660` | O tamanho da janela para `--snap` e `--wikishots`. |
+| `<pet> --demoframes=<pasta>` | Os quadros da demonstração animada do README (o assistente criando um pet, o pet andando na prévia…) e o `frames.txt` com quanto tempo cada um fica. |
+| `--snapsize=1000x660` | O tamanho da janela para `--snap`, `--wikishots` e `--demoframes`. |
 | `--scale=1.5` | Outro zoom só nesta execução. |
 | `--lang=en` / `--lang=pt` | Outro idioma só nesta execução (a configuração não muda). |
 | `--settings=<arquivo>` | Outro arquivo de configurações só nesta execução (fotos limpas, testes). |

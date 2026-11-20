@@ -7,6 +7,8 @@ namespace PetEditor
 		public static string SnapDir;
 		/// <summary>Developer: "--wikishots=<folder>", the pictures of the wiki (every page, window and state), then close.</summary>
 		public static string WikiDir;
+		/// <summary>Developer: "--demoframes=<folder>", the frames of the animated demo of the README, then close.</summary>
+		public static string DemoDir;
 		public static System.Drawing.Size SnapSize;
 		/// <summary>The page to show at the start ("--page=settings": the editor opened again after a change of size).</summary>
 		public static string StartPage => Environment.GetCommandLineArgs().FirstOrDefault(a => a.StartsWith("--page="))?.Substring(7);
@@ -62,6 +64,8 @@ namespace PetEditor
 			// developer: a picture of every page, light and dark, in this folder ("--snap=C:\folder"), then it closes
 			SnapDir = args.FirstOrDefault(a => a.StartsWith("--snap="))?.Substring(7);
 			WikiDir = args.FirstOrDefault(a => a.StartsWith("--wikishots="))?.Substring(12);
+			DemoDir = args.FirstOrDefault(a => a.StartsWith("--demoframes="))?.Substring(13);
+			WikiDir ??= DemoDir;   // the same quiet mode (errors to a file)
 			var size = args.FirstOrDefault(a => a.StartsWith("--snapsize="))?.Substring(11).Split('x');
 			if (size?.Length == 2) SnapSize = new System.Drawing.Size(int.Parse(size[0]), int.Parse(size[1]));
 			var form = new MainForm(open); Timing.Mark("window built");

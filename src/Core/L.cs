@@ -161,6 +161,7 @@ anim.new|Nova|New|Nueva
 anim.search|Buscar por nome ou número|Search by name or number|Buscar por nombre o número
 anim.searchShort|Buscar|Search|Buscar
 anim.sub|#{0}  ·  {1} quadros|#{0}  ·  {1} frames|#{0}  ·  {1} cuadros
+anim.sub1|#{0}  ·  1 quadro|#{0}  ·  1 frame|#{0}  ·  1 cuadro
 anim.hiddenShort|fora do painel|not in the panel|fuera del panel
 anim.none|Nenhuma animação. Crie uma com “+ Nova”.|No animation. Create one with “+ New”.|Ninguna animación. Crea una con “+ Nueva”.
 anim.inPicker|Aparece no painel de animações|Shown in the animation panel|Aparece en el panel de animaciones

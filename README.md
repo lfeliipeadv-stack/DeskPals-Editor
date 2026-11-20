@@ -1,126 +1,143 @@
 <p align="center">
-  <img src="docs/icon.png" width="96" alt="Pet Editor icon">
-</p>
-
-<h1 align="center">Desktop Pet Editor</h1>
-
-<p align="center">
-  A Windows program to create and edit desktop pets — the little animated characters that walk on your windows,
-  fall on the taskbar and can be dragged with the mouse.
+  <img src="docs/banner.png" alt="Desktop Pet Editor: create and edit desktop pets for Windows, with a live preview and no XML by hand" width="100%">
 </p>
 
 <p align="center">
-  <a href="https://github.com/lfeliipeadv-stack/desktop-pet-editor/releases/latest/download/PetEditor.exe"><b>⬇️ Download PetEditor.exe</b></a>
-  &nbsp;·&nbsp;
-  <a href="https://github.com/lfeliipeadv-stack/desktop-pet-editor/releases">All releases</a>
-  &nbsp;·&nbsp;
-  <a href="wiki/Home.md"><b>📖 Wiki</b></a> (<a href="wiki/pt-BR/Home.md">em português</a>)
-  &nbsp;·&nbsp;
-  <a href="https://github.com/lfeliipeadv-stack/meu-pet">DesktopPet, the app that runs the pets</a>
+  <a href="https://github.com/lfeliipeadv-stack/desktop-pet-editor/releases/latest"><img src="https://img.shields.io/github/v/release/lfeliipeadv-stack/desktop-pet-editor?label=release&color=1f7a4d" alt="Latest release"></a>
+  <a href="https://github.com/lfeliipeadv-stack/desktop-pet-editor/releases"><img src="https://img.shields.io/github/downloads/lfeliipeadv-stack/desktop-pet-editor/total?label=downloads&color=1f7a4d" alt="Downloads"></a>
+  <img src="https://img.shields.io/badge/Windows-10%20%7C%2011-1f7a4d" alt="Windows 10 and 11">
+  <img src="https://img.shields.io/badge/.NET-10-1f7a4d" alt=".NET 10">
+  <img src="https://img.shields.io/badge/language-English%20%7C%20Portugu%C3%AAs-1f7a4d" alt="English and Portuguese">
+  <a href="LICENSE"><img src="https://img.shields.io/github/license/lfeliipeadv-stack/desktop-pet-editor?color=1f7a4d" alt="MIT license"></a>
 </p>
 
-![The Animations page: the list of animations, the editor of the chosen one, the live preview and the sprite sheet](docs/screenshots/animations.png)
+<h3 align="center">
+  <a href="https://github.com/lfeliipeadv-stack/desktop-pet-editor/releases/latest/download/PetEditor.exe">⬇️ Download PetEditor.exe</a>
+  &nbsp;·&nbsp;
+  <a href="https://github.com/lfeliipeadv-stack/desktop-pet-editor/wiki">📖 Wiki</a>
+  &nbsp;·&nbsp;
+  <a href="https://github.com/lfeliipeadv-stack/desktop-pet-editor/wiki/Inicio">🇧🇷 Em português</a>
+</h3>
 
-A pet is a single `animations.xml` file with its sprite sheet, animations, entrances, child windows and sounds inside.
-The editor opens it, shows every part on its own page and plays the pet in a live preview while you change it — no XML
-by hand. It is made for [DesktopPet](https://github.com/lfeliipeadv-stack/meu-pet) and writes the same `animations.xml`
-format it reads.
+<p align="center">
+  Desktop pets are the little animated characters of <a href="https://github.com/lfeliipeadv-stack/meu-pet">DesktopPet</a>
+  that walk on your windows, fall on the taskbar and can be picked up with the mouse.<br>
+  The <b>Pet Editor</b> makes your own: from a few pictures to a pet that walks, in minutes.
+</p>
 
-The full manual, with a picture of every page and window, is in the **[Wiki](wiki/Home.md)** — also
-[in Portuguese](wiki/pt-BR/Home.md).
+<p align="center">
+  <img src="docs/demo.gif" alt="The Pet Editor in action: the assistant turns eight pictures into a pet, which walks in the live preview and lands on a test window" width="900">
+  <br><sub>Eight pictures become a pet in three steps — then it walks in the live preview, with a test window on the stage.</sub>
+</p>
 
-## Features
+---
 
-**Start a pet**
-- **New pet assistant**: choose your pictures (several PNGs or an animated GIF), tell which way they face, pick the
-  frames for walking, turning, falling and being dragged — in three steps the pet already walks.
-- **New pet** from a model that already walks, turns, blinks and falls from the sky.
-- Open any `animations.xml`, a pet folder, or one of the pets downloaded in DesktopPet to see how it was made.
-- Drag pictures, a GIF or an `animations.xml` onto the window.
-
-**Edit it**
-- **Sprite sheet**: import a PNG, build one from separate pictures, set columns, rows, transparent colour and skins.
-- **Animations**: frames by clicking the sheet (drag to reorder), repeat count, movement per step, opacity and speed
-  (formulas such as `random/4+8` or `screenW+10` work), and what comes next — at the end, on a border, without ground.
-- **Ready-made animations**: walk, turn, run, jump, climb the side, sit, sleep… made from your frames.
-- **Copy animations from another pet**, with the frames, the animations that follow them and their child windows.
-- **Entrances**, **child windows** (a second picture that appears with an animation) and **MP3 sounds**.
-- **Pixel editor**: pencil, line, rectangle, bucket, eyedropper, colour swap (in one frame or all of them), outline,
-  mirror and move. **Skins**: the same pet in other colours.
-- Undo and redo for everything, and a copy of your work every minute (brought back if the editor closes unexpectedly).
-
-**Check it**
-- **Live preview** that plays the pet like DesktopPet does: borders, gravity, flips, child windows, the mouse to drag
-  and throw it, a test window to walk on, frame-by-frame stepping and the frame before shown underneath.
-- **Checker**: animations nothing reaches, missing frames, wrong numbers… each problem is one click from its place,
-  and the side bar and the list of animations show how many there are.
-- **Animation map**: every animation as a card with arrows to what comes next.
-- **XML** page with the file as it will be saved (editable).
-- **Test on the desktop**: runs the pet in DesktopPet and updates it with every change (no need to save).
-
-**Share it**
-- **Export as .zip**: the pet, its icon, an animated preview and a README, ready to send.
-- **Prepare for the gallery**: the complete folder for a pet gallery, with its `pets.json` line.
-- **Optimize the size**: removes unused frames and saves the sheet with a palette when it can.
-
-**Comfort**
-- English and Portuguese, light and dark themes, accent colours.
-- Follows the zoom of Windows, or a size of its own (80% to 150%) in Settings.
-- Keyboard: `Ctrl+N/O/S`, `Ctrl+Z/Y`, `F5` tests on the desktop; in the preview `Space` pauses, `→` steps, `R` restarts.
-- A short tour the first time it opens.
-
-## Screenshots
+## ✨ Make a pet in three steps
 
 <table>
   <tr>
-    <td width="50%"><img src="docs/screenshots/project.png" alt="Project page"><br><sub>Project: start, open, save and share</sub></td>
-    <td width="50%"><img src="docs/screenshots/sprite-sheet.png" alt="Sprite sheet page"><br><sub>Sprite sheet: every frame of the pet</sub></td>
-  </tr>
-  <tr>
-    <td><img src="docs/screenshots/assistant.png" alt="New pet assistant"><br><sub>New pet assistant: from your pictures or a GIF</sub></td>
-    <td><img src="docs/screenshots/ready-made-animations.png" alt="Ready-made animations"><br><sub>Ready-made animations made from your frames</sub></td>
-  </tr>
-  <tr>
-    <td><img src="docs/screenshots/pixel-editor.png" alt="Pixel editor"><br><sub>Pixel editor: small retouches without leaving the editor</sub></td>
-    <td><img src="docs/screenshots/animations-dark.png" alt="Dark theme"><br><sub>The dark theme</sub></td>
+    <td width="33%" valign="top"><img src="wiki/images/en/assistant-1.png" alt="Step 1: the pictures"><br><b>1. Your pictures</b><br><sub>Several PNGs, an animated GIF or an existing sheet. Drawings facing right are mirrored for you.</sub></td>
+    <td width="33%" valign="top"><img src="wiki/images/en/assistant-2.png" alt="Step 2: what each frame does"><br><b>2. What each frame does</b><br><sub>Click the frames of standing, walking, turning, falling, being picked up… in order.</sub></td>
+    <td width="33%" valign="top"><img src="wiki/images/en/assistant-3.png" alt="Step 3: name and manner"><br><b>3. Name and manner</b><br><sub>Name, author, speed. The pet already walks, turns, falls from the sky and comes onto the screen.</sub></td>
   </tr>
 </table>
 
-## Install
+## 🧰 Everything a pet needs, one page each
+
+<table>
+  <tr>
+    <td width="50%" valign="top">
+      <img src="wiki/images/en/page-animations.png" alt="Animations page">
+      <h4>🎞️ Animations with a live preview</h4>
+      Frames by clicking the sheet, repeat, movement, speed and what comes next — at the end, on a border, without
+      ground. The preview plays it like DesktopPet: grab the pet with the mouse, throw it, add a test window, step frame
+      by frame.
+    </td>
+    <td width="50%" valign="top">
+      <img src="wiki/images/en/ready-made-animations.png" alt="Ready-made animations">
+      <h4>🧩 Ready-made animations</h4>
+      Walk, turn, run, jump, climb the side, sit, sleep, dance, talk… made from your frames, with their movement and
+      next animations already set. Or copy animations (with their frames) from another pet.
+    </td>
+  </tr>
+  <tr>
+    <td valign="top">
+      <img src="wiki/images/en/checker-problems.png" alt="The checker">
+      <h4>✅ A checker that never sleeps</h4>
+      Missing animations, frames out of the sheet, a pet that walks off the screen, formulas that do not work… found
+      a moment after each change, with a number in the side bar and a click to go there.
+    </td>
+    <td valign="top">
+      <img src="wiki/images/en/map-small-pet.png" alt="The animation map">
+      <h4>🗺️ The animation map</h4>
+      Every animation as a card, with arrows to what comes next: see at a glance how the pet moves from one animation
+      to another — and what nothing reaches.
+    </td>
+  </tr>
+  <tr>
+    <td valign="top">
+      <img src="wiki/images/en/pixel-editor.png" alt="The pixel editor">
+      <h4>🎨 Pixel editor and skins</h4>
+      Pencil, line, rectangle, bucket, eyedropper, colour swap in every frame, outline, mirror. Make a skin: the same
+      pet in other colours.
+    </td>
+    <td valign="top">
+      <img src="wiki/images/en/page-sheet.png" alt="The sprite sheet">
+      <h4>🖼️ Sprite sheet</h4>
+      Import a PNG or build the sheet from separate pictures or a GIF. Columns, rows, transparent colour, skins — and an
+      optimizer that removes unused frames and compresses the picture.
+    </td>
+  </tr>
+</table>
+
+**And also:** entrances, child windows (a ball, a bathtub, a ship that appears with an animation), MP3 sounds, the XML
+as it will be saved, **Test on the desktop** (`F5`) in a real DesktopPet updated with every change, **Export as .zip**
+ready to send, undo and redo for everything, a copy of your work every minute, drop files on the window, light and dark
+themes, and a size that follows the zoom of Windows.
+
+<p align="center"><img src="wiki/images/en/dark-theme.png" alt="The dark theme" width="760"></p>
+
+## ⬇️ Install
 
 1. Install the [.NET 10 Desktop Runtime](https://dotnet.microsoft.com/download/dotnet/10.0) (Windows 10 or 11, 64-bit).
-2. Download [`PetEditor.exe`](https://github.com/lfeliipeadv-stack/desktop-pet-editor/releases/latest/download/PetEditor.exe) and run it. Nothing else to install.
+2. Download [`PetEditor.exe`](https://github.com/lfeliipeadv-stack/desktop-pet-editor/releases/latest/download/PetEditor.exe) and run it — one file, nothing to install.
+3. Optional: [DesktopPet](https://github.com/lfeliipeadv-stack/meu-pet) 2.8.3 or newer for **Test on the desktop**.
 
-The settings are kept in `%AppData%\DesktopPet\PetEditor.json`.
+The settings are kept in `%AppData%\DesktopPet\PetEditor.json`. Each release has `SHA256SUMS` to check the download.
 
-**Test on the desktop** needs [DesktopPet](https://github.com/lfeliipeadv-stack/meu-pet) 2.8.3 or newer (it runs
-`DesktopPet.exe --test-pet=<file>`, a copy of the app that shows only that pet and saves nothing). Everything else
-works without it.
+## 📖 Documentation
 
-## Build
+The **[Wiki](https://github.com/lfeliipeadv-stack/desktop-pet-editor/wiki)** has a page, with pictures, for every part
+of the program — also **[in Portuguese](https://github.com/lfeliipeadv-stack/desktop-pet-editor/wiki/Inicio)**.
+
+| Start | The pages | Reference |
+| --- | --- | --- |
+| [Installation](https://github.com/lfeliipeadv-stack/desktop-pet-editor/wiki/Installation) | [Animations](https://github.com/lfeliipeadv-stack/desktop-pet-editor/wiki/Animations) | [Formulas](https://github.com/lfeliipeadv-stack/desktop-pet-editor/wiki/Formulas) |
+| [Getting started](https://github.com/lfeliipeadv-stack/desktop-pet-editor/wiki/Getting-started) | [Sprite sheet](https://github.com/lfeliipeadv-stack/desktop-pet-editor/wiki/Sprite-sheet) | [Keyboard and mouse](https://github.com/lfeliipeadv-stack/desktop-pet-editor/wiki/Keyboard-and-mouse) |
+| [The window](https://github.com/lfeliipeadv-stack/desktop-pet-editor/wiki/The-window) | [Checker](https://github.com/lfeliipeadv-stack/desktop-pet-editor/wiki/Checker) | [The pet format](https://github.com/lfeliipeadv-stack/desktop-pet-editor/wiki/Pet-format) |
+| [Test on the desktop](https://github.com/lfeliipeadv-stack/desktop-pet-editor/wiki/Test-on-the-desktop) | [Sharing a pet](https://github.com/lfeliipeadv-stack/desktop-pet-editor/wiki/Sharing) | [FAQ](https://github.com/lfeliipeadv-stack/desktop-pet-editor/wiki/FAQ) |
+
+The same pages are also in the [`wiki`](wiki/Home.md) folder of this repository.
+
+## 🛠️ Build
 
 ```bash
 dotnet build src/PetEditor.csproj -c Release
 dotnet publish src/PetEditor.csproj -c Release -o out    # a single PetEditor.exe
 ```
 
-The files in [`src/Shared`](src/Shared) come from DesktopPet (the XML model, the theme and the MP3 player), so the
-editor reads and writes pets exactly as the app does.
+C# and Windows Forms on .NET 10. The files in [`src/Shared`](src/Shared) come from DesktopPet (the XML model, the theme
+and the MP3 player), so the editor reads and writes pets exactly as the app does. Tests, the options of
+`PetEditor.exe` and how the pictures of the wiki are made: [For developers](https://github.com/lfeliipeadv-stack/desktop-pet-editor/wiki/For-developers).
 
-Developer options of `PetEditor.exe`:
+Found a problem or have an idea? [Open an issue](https://github.com/lfeliipeadv-stack/desktop-pet-editor/issues).
 
-| Option | What it does |
-| --- | --- |
-| `--devtests=<Pets folder>` | Runs the editor's tests (assistant, copy between pets, GIF, optimizer, .zip); the exit code is the number of failures. Uses the `pingo` pet of the [DesktopPet gallery](https://github.com/lfeliipeadv-stack/meu-pet/tree/master/Pets). |
-| `--roundtrip=<Pets folder>` | Reads and writes again every pet of the folder; exits with 0 when nothing changed. |
-| `<pet> --snap=<folder>` | A picture of every page and window, light and dark, plus `cortes.txt` with any text cut off. `--snapsize=1000x660` sets the window size. |
-| `--scale=1.5` / `--lang=en` / `--settings=<file>` | Another zoom, language or settings file for this run only. |
-
-## Credits
+## 🙏 Credits
 
 Pets use the format of [desktopPet](https://github.com/Adrianotiger/desktopPet) by Adriano Petrucci, the Windows
-version of the classic eSheep. The pet in the screenshots is Rex, from the DesktopPet gallery.
+version of the classic eSheep. The pet in the pictures is Rex, from the
+[DesktopPet gallery](https://github.com/lfeliipeadv-stack/meu-pet/tree/master/Pets).
 
-## License
+## 📄 License
 
 MIT — see [LICENSE](LICENSE).
