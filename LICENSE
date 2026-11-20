@@ -1,7 +1,8 @@
 MIT License
 
 Copyright (c) 2026 Luan Felipe da Cruz
-Copyright (c) 2016 Adriano Petrucci (the pet format and the files in src/Shared, which come from desktopPet)
+Copyright (c) 2016 Adriano Petrucci and the desktopPet contributors (the pet format and src/Shared/AnimationXML.cs,
+which come from desktopPet: https://github.com/Adrianotiger/desktopPet)
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

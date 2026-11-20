@@ -134,9 +134,18 @@ Found a problem or have an idea? [Open an issue](https://github.com/lfeliipeadv-
 
 ## 🙏 Credits
 
-Pets use the format of [desktopPet](https://github.com/Adrianotiger/desktopPet) by Adriano Petrucci, the Windows
-version of the classic eSheep. The pet in the pictures is Rex, from the
-[DesktopPet gallery](https://github.com/lfeliipeadv-stack/meu-pet/tree/master/Pets).
+This editor stands on the work of **[Adriano Petrucci](https://github.com/Adrianotiger)**:
+
+- **[desktopPet](https://github.com/Adrianotiger/desktopPet)** — the Windows version of the classic eSheep, where the
+  pet format (`animations.xml`) was born. DesktopPet, the app these pets are made for, is a fork of it.
+- **[desktopPet-Editor](https://github.com/Adrianotiger/desktopPet-Editor)** — his web editor for these pets, which
+  inspired this one.
+- **[`src/Shared/AnimationXML.cs`](src/Shared/AnimationXML.cs)** — the model of the pet format, from desktopPet (by
+  Adriano Petrucci and its contributors, MIT license), used here as it is.
+
+Thank you, Adriano, for the sheep and everything that came after it. 🐑
+
+The pet in the pictures is Rex, from the [DesktopPet gallery](https://github.com/lfeliipeadv-stack/meu-pet/tree/master/Pets).
 
 ## 📄 License
 

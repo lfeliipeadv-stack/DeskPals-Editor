@@ -51,3 +51,11 @@ O editor mostra cada parte numa página própria e toca o pet numa prévia ao vi
 | [O formato do pet](Formato-do-pet.md) | O que há dentro do `animations.xml` |
 | [Perguntas frequentes](Perguntas-frequentes.md) | Dúvidas e problemas comuns |
 | [Para desenvolvedores](Para-desenvolvedores.md) | Compilar, testar, as opções do `PetEditor.exe`, o código |
+
+
+## Créditos
+
+Este editor se apoia no trabalho de [Adriano Petrucci](https://github.com/Adrianotiger): o
+[desktopPet](https://github.com/Adrianotiger/desktopPet) dele, a versão para Windows da ovelhinha clássica do eSheep, é
+onde nasceu o formato dos pets (o DesktopPet é um fork dele), e o [desktopPet-Editor](https://github.com/Adrianotiger/desktopPet-Editor)
+dele, feito para a web, inspirou este. O modelo do formato (`src/Shared/AnimationXML.cs`) vem do desktopPet, licença MIT.

@@ -1,4 +1,7 @@
-﻿using System;
+﻿// The model of the pet format (animations.xml), from desktopPet by Adriano Petrucci and its contributors:
+// https://github.com/Adrianotiger/desktopPet (MIT license). Used here as it is in DesktopPet, so the editor
+// reads and writes pets exactly as the app does.
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
