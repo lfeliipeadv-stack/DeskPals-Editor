@@ -209,7 +209,15 @@ const AVOID_WHEN_STILL = [
 
 /** Lê o animations.xml e devolve as estruturas do pet. */
 export function parsePetXml(xmlText) {
-  const doc = new DOMParser().parseFromString(xmlText, "application/xml");
+  const parse = (text) => new DOMParser().parseFromString(text, "application/xml");
+  let doc = parse(xmlText);
+  // Pets antigos escrevem o endereço do formato em xmlns:xsd, com um espaço no meio: o navegador recusa esse
+  // namespace (o programa para Windows aceita). O nome certo é xsi:schemaLocation, a mesma troca do editor.
+  if (doc.getElementsByTagName("parsererror").length && /xmlns:xsd="[^"]*\s[^"]*"/.test(xmlText)) {
+    let fixed = xmlText.replace(/xmlns:xsd="([^"]*)"/, 'xsi:schemaLocation="$1"');
+    if (!/xmlns:xsi=/.test(fixed)) fixed = fixed.replace(/<animations\b/, '<animations xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"');
+    doc = parse(fixed);
+  }
   const failure = doc.getElementsByTagName("parsererror")[0];
   if (failure) throw new Error("animations.xml inválido: " + failure.textContent.trim());
 
@@ -833,6 +841,9 @@ export class Pet {
       child.sheetUrl = this.sheetUrl;
       child.tileWidth = this.tileWidth;
       child.tileHeight = this.tileHeight;
+      // as colunas e linhas da folha: sem elas o filho só desenhava o quadro 0 (o pinguim, no lugar do balão)
+      child.tilesX = this.tilesX;
+      child.tilesY = this.tilesY;
       child.width = this.width;
       child.height = this.height;
       child.volume = this.volume;
@@ -840,8 +851,11 @@ export class Pet {
       child.isChild = true;
       child.depth = (this.depth || 0) + 1;
       child.parent = this;
-      child.x = this.x + definition.position.x.get(ctx);
-      child.y = this.y + definition.position.y.get(ctx);
+      // A posição da filha é o valor da fórmula, como no C# (FormPet.PlayChild): imageX e imageY já são
+      // a posição do pai (<x>imageX</x> põe o balão em cima do pet; somar o pai de novo o jogava para fora da tela).
+      child.x = definition.position.x.get(ctx);
+      child.y = definition.position.y.get(ctx);
+      child.flipped = this.flipped;
       child.motion.reset(child.x, child.y, child.now());
       child.setNewAnimation(definition.next);
       child.nextStepAt = child.now();

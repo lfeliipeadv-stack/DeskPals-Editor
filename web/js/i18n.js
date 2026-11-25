@@ -72,6 +72,7 @@ const WEB = {
   "web.sourceRemove": ["Tirar esta fonte", "Remove this source", "Quitar esta fuente"],
   "nav.board": ["Todas as animações", "All animations", "Todas las animaciones"],
   "web.boardIntro": ["Todas as animações do pet tocando ao mesmo tempo, cada uma no seu ritmo. Clique numa para abrir.", "Every animation of the pet playing at the same time, each at its own pace. Click one to open it.", "Todas las animaciones de la mascota a la vez, cada una a su ritmo. Haz clic en una para abrirla."],
+  "web.testSpawn": ["Testar esta entrada: o pet entra por ela na página Testar no desktop", "Test this entrance: the pet comes in through it on the Test on the desktop page", "Probar esta entrada: la mascota entra por ella en la página Probar en el escritorio"],
   "web.seeAll": ["Ver todas", "See all", "Ver todas"],
   "web.restartAll": ["Começar todas juntas", "Start all together", "Empezar todas juntas"],
   "web.size": ["Tamanho", "Size", "Tamaño"],

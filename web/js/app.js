@@ -830,7 +830,9 @@ function pageSpawns(p) {
       h("td", {}, field("x", text(s, "x"), (v) => doc.set(s, "x", v.trim()), { small: true, formula: true })),
       h("td", {}, field("y", text(s, "y"), (v) => doc.set(s, "y", v.trim()), { small: true, formula: true })),
       h("td", {}, animSelect(next.textContent.trim(), (v) => doc.change(() => { next.textContent = v; }))),
-      h("td", {}, h("button", { class: "btn small danger", text: "×", title: t("web.remove"), onclick: () => { doc.change(() => doc.removeEl(s)); render(); } }))));
+      h("td", { style: "white-space:nowrap" },
+        h("button", { class: "btn small", text: "▶", title: t("web.testSpawn"), onclick: () => { state.testSpawn = +s.getAttribute("id"); go("test"); } }), " ",
+        h("button", { class: "btn small danger", text: "×", title: t("web.remove"), onclick: () => { doc.change(() => doc.removeEl(s)); render(); } }))));
     // onde ela põe o pet, em palavras, e as posições prontas
     const preset = (key, x, y) => h("button", { class: "btn small", text: t(key), onclick: () => { doc.change(() => { doc.set(s, "x", x); doc.set(s, "y", y); }); render(); } });
     tbl.append(h("tr", { class: "sub" }, h("td"), h("td", { colspan: 5 }, h("div", { class: "row" },
@@ -912,7 +914,9 @@ function pageSounds(p) {
           render();
         } }))),
       h("td", { text: String(Math.round((b64.length * 3) / 4 / 1024)) }),
-      h("td", {}, h("button", { class: "btn small danger", text: "×", title: t("web.remove"), onclick: () => { doc.change(() => doc.removeEl(s)); render(); } }))));
+      h("td", { style: "white-space:nowrap" },
+        h("button", { class: "btn small", text: "▶", title: t("web.testSpawn"), onclick: () => { state.testSpawn = +s.getAttribute("id"); go("test"); } }), " ",
+        h("button", { class: "btn small danger", text: "×", title: t("web.remove"), onclick: () => { doc.change(() => doc.removeEl(s)); render(); } }))));
   }
   p.append(h("div", { class: "card" }, doc.sounds.length ? tbl : h("p", { class: "hint", text: "—" }), h("div", { class: "row", style: "margin-top:10px" },
     h("button", { class: "btn small", text: "+ MP3…", onclick: async () => {
@@ -1012,6 +1016,7 @@ function pageTest(p) {
 
   const world = new World();
   let pet = null, raf = 0, url = null, drag = null;
+  state.testPet = () => pet;   // para os testes automáticos
   const g = canvas.getContext("2d");
   const measure = () => {
     world.width = Math.max(320, stage.clientWidth);
@@ -1091,10 +1096,14 @@ function pageTest(p) {
     url = URL.createObjectURL(new Blob([doc.serialize()], { type: "application/xml" }));
     pet = new Pet(world);
     pet.volume = 0.4;
+    // "▶" numa entrada (página Entradas na tela): o pet entra por ela, com as janelas filhas que ela abrir
+    const spawnId = state.testSpawn;
+    state.testSpawn = null;
+    if (spawnId != null) pet.getRandomSpawn = function () { delete this.getRandomSpawn; return this.spawns.get(spawnId) || this.getRandomSpawn(); };
     try {
       await pet.load(url);
       // a folha do editor já vem sem a cor transparente (o programa tira o magenta; o motor da demo, não)
-      if (doc.sheet) pet.sheet = doc.sheet;
+      if (doc.sheet) { pet.sheet = doc.sheet; for (const c of pet.children) c.sheet = doc.sheet; }
       // "▶ Testar esta animação" na página Animações: o pet começa por ela
       if (state.testAnim != null && doc.animById(state.testAnim)) pet.setNewAnimation(state.testAnim);
       state.testAnim = null;

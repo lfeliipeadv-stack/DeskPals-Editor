@@ -1,6 +1,6 @@
 // Guarda os arquivos do editor neste navegador: ele abre e funciona sem internet (a galeria e os links precisam dela).
 // Ao publicar uma versão nova, mude VERSION: os arquivos antigos saem e os novos entram.
-const VERSION = "deskpals-editor-3";
+const VERSION = "deskpals-editor-4";
 const FILES = [
   "./",
   "./index.html",
