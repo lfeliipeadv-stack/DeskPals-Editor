@@ -191,6 +191,21 @@ table.tbl tr.sub td { border-top: 0 !important; padding-top: 0; }
 .galpet img { width: 48px; height: 48px; image-rendering: pixelated; object-fit: contain; }
 .galpet b { font-size: 13px; }
 .galpet small { color: var(--muted); font-size: 11px; }
+.galpet .noicon { width: 48px; height: 48px; display: grid; place-items: center; font-size: 26px; opacity: .55; }
+.srcbar { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
+.chip { border: 1px solid var(--border); background: var(--surface); color: var(--text); border-radius: 20px; padding: 5px 13px; font: inherit; font-size: 13px; cursor: pointer; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.chip:hover { background: var(--hover); }
+.chip.on { background: var(--accent-soft); border-color: var(--accent); color: var(--accent); font-weight: 600; }
+.chip.add { border-style: dashed; color: var(--accent); }
+.srcadd { border: 1px solid var(--border); background: var(--surface2); border-radius: 10px; padding: 10px 12px; margin-bottom: 10px; display: grid; gap: 6px; }
+.srcadd[hidden] { display: none; }
+.srcadd label { font-weight: 600; font-size: 13px; }
+.srcadd .row { display: flex; gap: 8px; }
+.srcadd .row input { flex: 1; min-width: 0; }
+.srcstatus { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 12px; margin-bottom: 8px; min-height: 18px; }
+.linkbtn { border: 0; background: none; color: var(--accent); cursor: pointer; padding: 0; font: inherit; font-size: 12px; }
+.linkbtn:hover { text-decoration: underline; }
+.linkbtn.danger { color: var(--danger); }
 
 /* ---------------------------------------------------------- editor de pixels */
 .pxwrap { display: grid; grid-template-columns: 250px minmax(0, 1fr); gap: 14px; height: min(68vh, 640px); }

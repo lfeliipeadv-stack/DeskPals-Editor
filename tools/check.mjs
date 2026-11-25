@@ -230,6 +230,16 @@ try {
     await sleep(800);
     report.features.gallery = await evaluate(`document.querySelectorAll(".galpet").length`);
     await shot("23-galeria");
+    // uma fonte nova: o link de um repositório do GitHub (pets.json em Pets/), guardada para a próxima vez
+    await evaluate(`[...document.querySelectorAll(".chip.add")][0].click()`);
+    await evaluate(`(() => { const i = document.querySelector(".srcadd input"); i.value = "https://github.com/Adrianotiger/desktopPet"; document.querySelector(".srcadd .btn").click(); })()`);
+    for (let i = 0; i < 60; i++) { await sleep(250); if (await evaluate(`document.querySelectorAll(".galpet").length > 0 && document.querySelector(".chip.on")?.textContent.includes("Adrianotiger")`)) break; }
+    await sleep(800);
+    report.features.source = await evaluate(`({ chips: [...document.querySelectorAll(".chip")].map((c) => c.textContent), pets: document.querySelectorAll(".galpet").length, status: document.querySelector(".srcstatus span")?.textContent })`);
+    await shot("23b-fonte");
+    await evaluate(`document.querySelector(".modal-x").click()`);
+    await evaluate(`window.deskpalsEditor.galleryDialog(() => {})`); await sleep(1500);
+    report.features.sourceKept = await evaluate(`[...document.querySelectorAll(".chip")].map((c) => c.textContent).join(" | ")`);
     await evaluate(`document.querySelector(".modal-x").click()`);
     await evaluate(`(async () => { const d = await import("/js/dialogs.js"); d.wizardDialog(window.deskpalsEditor.state.doc, () => {}); })()`);
     await sleep(300);

@@ -11,6 +11,7 @@ import { makeZip, download, makeIco, frameCanvas, squareIcon, imageFileToPng, ba
 import { World, Pet } from "./pet-engine.js";
 import { h, $, toast, pickFile, modal, confirmBox, promptBox, alertBox, popupMenu, toggle } from "./ui.js";
 import { behaviorDialog, buildSheetDialog, wizardDialog, galleryDialog } from "./dialogs.js";
+import { parseSource } from "./sources.js";
 import { pixelEditor } from "./pixel.js";
 import { mapPage } from "./map.js";
 import { encodeGif } from "./gif.js";
@@ -110,10 +111,18 @@ async function openUrl() {
   const link = await promptBox(t("web.openUrlAsk"), "https://github.com/", { title: t("web.openUrl") });
   if (!link || !/^https?:\/\//i.test(link.trim())) return;
   if (!confirmLeave()) return;
+  // o link de um repositório (sem pasta nem arquivo) vai para a galeria, que procura os pets dele
+  const repo = parseSource(link);
+  const toGallery = () => galleryDialog((xml) => openDoc(xml, "animations.xml"), link.trim());
+  if (repo && repo.path == null && !/\.xml$/i.test(link.trim())) { toGallery(); return; }
   toast(t("web.loading"));
   try {
     const r = await fetch(rawUrl(link));
-    if (!r.ok) throw new Error(r.status + " " + r.statusText);
+    if (!r.ok) {
+      // uma pasta sem animations.xml pode ser uma pasta de pets
+      if (r.status === 404 && repo && !/\.xml$/i.test(link.trim())) { toGallery(); return; }
+      throw new Error(r.status + " " + r.statusText);
+    }
     await openDoc(await r.text(), "animations.xml");
   } catch (e) { toast(t("web.loadFail", e.message)); }
 }
@@ -1101,4 +1110,4 @@ render();
 if ("serviceWorker" in navigator && (location.protocol === "https:" || location.hostname === "localhost")) navigator.serviceWorker.register("sw.js").catch(() => {});
 
 // o teste automático (tools/) usa isto para abrir um pet sem clicar
-window.deskpalsEditor = { openDoc, state, go, rawUrl, petZip, previewGif, whereText };
+window.deskpalsEditor = { openDoc, state, go, rawUrl, petZip, previewGif, whereText, galleryDialog };

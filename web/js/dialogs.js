@@ -9,6 +9,7 @@ import { PetDoc, prettyXml } from "./doc.js";
 import { KINDS, createBehavior } from "./behaviors.js";
 import { loadFrames, buildSheet, petFrames, mirrored, blank } from "./sheet.js";
 import { makeIco } from "./files.js";
+import { OFFICIAL, parseSource, checkSource, listPets, savedSources, saveSources, sourceKey, sourceLabel, petUrl, niceName, SourceError, MAX_SCANNED } from "./sources.js";
 
 /* ---------------------------------------------------------- peças */
 
@@ -252,39 +253,138 @@ export async function createPet(frames, picks, name, author, speed, climb) {
   return prettyXml(doc.serialize());
 }
 
-/* ---------------------------------------------------------- abrir um pet da galeria do DeskPals */
+/* ---------------------------------------------------------- abrir um pet da galeria (a do DeskPals ou um repositório do GitHub) */
 
-const GALLERY = "https://raw.githubusercontent.com/lfeliipeadv-stack/DeskPals/master/Pets/";
-
-export async function galleryDialog(onOpen) {
-  const grid = h("div", { class: "gallery" }, h("p", { class: "hint", text: t("web.loading") }));
+/**
+ * A galeria: a do DeskPals e as fontes que a pessoa acrescentou colando o link de um repositório do GitHub.
+ * link (opcional) já começa procurando pets nesse repositório.
+ */
+export async function galleryDialog(onOpen, link = "") {
+  const grid = h("div", { class: "gallery" });
   const search = h("input", { type: "text", placeholder: t("anim.searchShort") });
-  const m = modal({ title: t("web.gallery"), wide: true, body: h("div", {}, h("p", { class: "hint", text: t("web.galleryHint") }), search, grid) });
-  let pets;
-  try {
-    const r = await fetch(GALLERY + "pets.json", { cache: "no-cache" });
-    if (!r.ok) throw new Error(r.status + "");
-    pets = (await r.json()).pets || [];
-  } catch (e) { grid.textContent = t("web.loadFail", e.message); return; }
-  pets.sort((a, b) => (b.lastupdate || "").localeCompare(a.lastupdate || ""));
+  const bar = h("div", { class: "srcbar", role: "tablist" });
+  const status = h("div", { class: "srcstatus hint" });
+  const linkIn = h("input", { type: "url", placeholder: "https://github.com/…", "aria-label": t("web.sourceAsk") });
+  const findBtn = h("button", { class: "btn primary", text: t("web.sourceFind") });
+  const add = h("div", { class: "srcadd" },
+    h("label", { text: t("web.sourceAsk") }),
+    h("div", { class: "row" }, linkIn, findBtn),
+    h("small", { class: "hint", text: t("web.sourceHint") }));
+  add.hidden = true;
+  const m = modal({ title: t("web.gallery"), wide: true, body: h("div", {}, bar, add, status, search, grid) });
+
+  let sources = [OFFICIAL, ...savedSources()];
+  let current = null, pets = [];
+  const lists = new Map();   // as listas já baixadas nesta visita
+  const store = () => saveSources(sources.filter((s) => !s.official));
+  const lang = document.documentElement.lang || "en";
+  const message = (e) => {
+    if (e instanceof SourceError) {
+      if (e.kind === "limit") return t("web.sourceLimit", new Date((e.arg > 1 ? e.arg * 1000 : Date.now() + 3600e3)).toLocaleTimeString(lang, { hour: "2-digit", minute: "2-digit" }));
+      if (e.kind === "notFound") return t("web.sourceNotFound", e.arg);
+      return t("web.sourceNone", e.arg);
+    }
+    return t("web.loadFail", e.message);
+  };
+
+  const drawBar = () => {
+    bar.textContent = "";
+    for (const s of sources) {
+      const on = current && sourceKey(s) === sourceKey(current);
+      const chip = h("button", { class: "chip" + (on ? " on" : ""), role: "tab", "aria-selected": on ? "true" : "false",
+        title: s.official ? "github.com/" + s.owner + "/" + s.repo : "github.com/" + s.owner + "/" + s.repo + (s.path ? "/tree/" + s.branch + "/" + s.path : ""),
+        onclick: () => select(s) }, sourceLabel(s));
+      bar.append(chip);
+    }
+    bar.append(h("button", { class: "chip add" + (add.hidden ? "" : " on"), text: "+ " + t("web.sourceAdd"), onclick: () => {
+      add.hidden = !add.hidden; drawBar(); if (!add.hidden) linkIn.focus();
+    } }));
+  };
+
+  const drawStatus = (text, s) => {
+    status.textContent = "";
+    status.append(h("span", { text }));
+    if (s && !s.official) {
+      status.append(
+        h("button", { class: "linkbtn", text: "↻ " + t("web.sourceRefresh"), onclick: () => select(s, true) }),
+        h("button", { class: "linkbtn danger", text: t("web.sourceRemove"), onclick: () => {
+          sources = sources.filter((x) => sourceKey(x) !== sourceKey(s)); store(); select(OFFICIAL);
+        } }));
+    }
+  };
+
   const fill = () => {
     const q = search.value.trim().toLowerCase();
     grid.textContent = "";
     for (const p of pets) {
-      const label = p.name || p.folder;
-      if (q && !label.toLowerCase().includes(q) && !(p.author || "").toLowerCase().includes(q)) continue;
-      grid.append(h("button", { class: "galpet", onclick: async () => {
+      const label = niceName(p);
+      if (q && !label.toLowerCase().includes(q) && !(p.author || "").toLowerCase().includes(q) && !p.folder.toLowerCase().includes(q)) continue;
+      const base = petUrl(current, p);
+      const paw = () => h("span", { class: "noicon", text: "🐾" });
+      let pic;
+      if (p.icon === false) pic = paw();
+      else { pic = h("img", { src: base + "icon.png", alt: "", loading: "lazy" }); pic.addEventListener("error", () => pic.replaceWith(paw()), { once: true }); }
+      const sub = [p.author || "", p.animations ? t("web.nAnims", p.animations) : ""].filter(Boolean).join(" · ");
+      grid.append(h("button", { class: "galpet", title: p.path || p.folder, onclick: async () => {
         m.close();
         toast(t("web.loading"));
         try {
-          const r = await fetch(GALLERY + encodeURIComponent(p.folder) + "/animations.xml");
+          const r = await fetch(base + "animations.xml");
           if (!r.ok) throw new Error(r.status + "");
           onOpen(await r.text(), p);
         } catch (e) { toast(t("web.loadFail", e.message)); }
-      } }, h("img", { src: GALLERY + encodeURIComponent(p.folder) + "/icon.png", alt: "", loading: "lazy" }),
-        h("b", { text: label }), h("small", { text: (p.author || "") + (p.animations ? " · " + t("web.nAnims", p.animations) : "") })));
+      } }, pic, h("b", { text: label }), h("small", { text: sub })));
     }
+    if (!grid.childElementCount && pets.length) grid.append(h("p", { class: "hint", text: "—" }));
   };
+
+  const show = (s, list) => {
+    pets = [...list];
+    if (pets.some((p) => p.lastupdate)) pets.sort((a, b) => (b.lastupdate || "").localeCompare(a.lastupdate || ""));
+    else pets.sort((a, b) => niceName(a).localeCompare(niceName(b)));
+    const more = list.truncated ? " " + t("web.sourceMore", MAX_SCANNED) : "";
+    drawStatus(s.official ? t("web.galleryHint") : t("web.sourceFound", pets.length, sourceLabel(s)) + more, s);
+    fill();
+  };
+
+  async function select(s, fresh = false) {
+    current = s; drawBar();
+    grid.textContent = ""; pets = [];
+    const key = sourceKey(s);
+    if (!fresh && lists.has(key)) return show(s, lists.get(key));
+    if (!fresh && !s.official && Array.isArray(s.pets)) return show(s, s.pets);
+    drawStatus(t("web.sourceSearching", sourceLabel(s)), null);
+    try {
+      const list = await listPets(s);
+      lists.set(key, list);
+      if (!s.official) { s.pets = list; s.when = new Date().toISOString(); store(); }
+      if (current === s) show(s, list);
+    } catch (e) { if (current === s) drawStatus(message(e), s); }
+  }
+
+  async function find() {
+    const given = parseSource(linkIn.value);
+    if (!given) { drawStatus(t("web.sourceBad"), null); linkIn.focus(); return; }
+    findBtn.disabled = true;
+    current = null; drawBar(); grid.textContent = ""; pets = [];
+    drawStatus(t("web.sourceSearching", given.owner + "/" + given.repo + (given.path ? "/" + given.path : "")), null);
+    try {
+      const { source, pets: list } = await checkSource(given);
+      const key = sourceKey(source);
+      const saved = { ...source, pets: list, when: new Date().toISOString() };
+      if (key === sourceKey(OFFICIAL)) { add.hidden = true; select(OFFICIAL); return; }
+      sources = [...sources.filter((x) => sourceKey(x) !== key), saved];
+      store();
+      lists.set(key, list);
+      linkIn.value = ""; add.hidden = true;
+      current = saved; drawBar(); show(saved, list);
+    } catch (e) { drawStatus(message(e), null); }
+    finally { findBtn.disabled = false; }
+  }
+  findBtn.addEventListener("click", find);
+  linkIn.addEventListener("keydown", (e) => { if (e.key === "Enter") { e.preventDefault(); find(); } });
   search.addEventListener("input", fill);
-  fill();
+
+  if (link) { add.hidden = false; linkIn.value = link; drawBar(); find(); }
+  else select(OFFICIAL);
 }

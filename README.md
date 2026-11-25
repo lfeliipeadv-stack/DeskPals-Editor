@@ -45,8 +45,9 @@ editor in the browser, on any computer, with nothing to install. Nothing is uplo
   entrances are described in words.
 - **Test it:** the pet runs with the same engine as DeskPals — it walks on a window, falls on the taskbar and can be
   picked up and thrown with the mouse.
-- **Share it:** open any pet of the DeskPals gallery, export a `.zip` just like the gallery's (with the animated
-  preview), or send yours to the gallery.
+- **Share it:** open any pet of the DeskPals gallery — or paste the link of any GitHub repository and the editor finds
+  its pets (its `pets.json`, or every folder with an `animations.xml`) —, export a `.zip` just like the gallery's (with
+  the animated preview), or send yours to the gallery.
 - Works offline after the first visit and can be installed as an app. English, Português and Español.
 
 The code is in [`web/`](web) — plain JavaScript, no build step. To try it locally: `node tools/serve.mjs 8080`.
