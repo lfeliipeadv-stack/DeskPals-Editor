@@ -12,6 +12,8 @@
 </p>
 
 <h3 align="center">
+  <a href="https://lfeliipeadv-stack.github.io/DeskPals-Editor/">🌐 Open the online editor</a>
+  &nbsp;·&nbsp;
   <a href="https://github.com/lfeliipeadv-stack/desktop-pet-editor/releases/latest/download/PetEditor.exe">⬇️ Download PetEditor.exe</a>
   &nbsp;·&nbsp;
   <a href="https://github.com/lfeliipeadv-stack/desktop-pet-editor/wiki">📖 Wiki</a>
@@ -31,6 +33,23 @@
 </p>
 
 ---
+
+## 🌐 The online editor
+
+**[lfeliipeadv-stack.github.io/DeskPals-Editor](https://lfeliipeadv-stack.github.io/DeskPals-Editor/)** — the same
+editor in the browser, on any computer, with nothing to install. Nothing is uploaded: the pet stays on your computer.
+
+- **Make a pet:** start from a model that already walks, or let the assistant turn your PNG pictures or a GIF into a pet;
+  build the sprite sheet from loose pictures and fix it in the pixel editor.
+- **Understand it:** the animation map shows what comes after what, every animation shows where it is used, and the
+  entrances are described in words.
+- **Test it:** the pet runs with the same engine as DeskPals — it walks on a window, falls on the taskbar and can be
+  picked up and thrown with the mouse.
+- **Share it:** open any pet of the DeskPals gallery, export a `.zip` just like the gallery's (with the animated
+  preview), or send yours to the gallery.
+- Works offline after the first visit and can be installed as an app. English, Português and Español.
+
+The code is in [`web/`](web) — plain JavaScript, no build step. To try it locally: `node tools/serve.mjs 8080`.
 
 ## ✨ Make a pet in three steps
 
@@ -139,7 +158,7 @@ This editor stands on the work of **[Adriano Petrucci](https://github.com/Adrian
 - **[desktopPet](https://github.com/Adrianotiger/desktopPet)** — the Windows version of the classic eSheep, where the
   pet format (`animations.xml`) was born. DesktopPet, the app these pets are made for, is a fork of it.
 - **[desktopPet-Editor](https://github.com/Adrianotiger/desktopPet-Editor)** — his web editor for these pets, which
-  inspired this one.
+  inspired this one and the online editor.
 - **[`src/Shared/AnimationXML.cs`](src/Shared/AnimationXML.cs)** — the model of the pet format, from desktopPet (by
   Adriano Petrucci and its contributors, MIT license), used here as it is.
 
