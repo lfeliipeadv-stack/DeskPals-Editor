@@ -14,6 +14,7 @@ import { behaviorDialog, buildSheetDialog, wizardDialog, galleryDialog } from ".
 import { parseSource } from "./sources.js";
 import { pixelEditor } from "./pixel.js";
 import { mapPage } from "./map.js";
+import { LiveSet } from "./live.js";
 import { encodeGif } from "./gif.js";
 
 /* ---------------------------------------------------------- utilidades de página */
@@ -23,7 +24,7 @@ const state = { doc: null, page: "project", anim: null, search: "", cleanup: [],
 const PAGES = [
   ["project", "nav.project"], ["header", "nav.header"], ["sheet", "nav.sheet"], ["animations", "nav.animations"],
   ["spawns", "nav.spawns"], ["childs", "nav.childs"], ["sounds", "nav.sounds"],
-  ["-", "nav.tools"], ["check", "nav.check"], ["map", "nav.map"], ["xml", "nav.xml"], ["test", "act.test"],
+  ["-", "nav.tools"], ["check", "nav.check"], ["board", "nav.board"], ["map", "nav.map"], ["xml", "nav.xml"], ["test", "act.test"],
 ];
 
 /* ---------------------------------------------------------- guardar neste navegador (recuperar) */
@@ -292,7 +293,7 @@ function render() {
     return;
   }
   ({ project: pageProject, header: pageHeader, sheet: pageSheet, animations: pageAnimations, spawns: pageSpawns, childs: pageChilds,
-    sounds: pageSounds, check: pageCheck, map: (el) => mapPage(el, state.doc, go), xml: pageXml, test: pageTest })[state.page]?.(p);
+    sounds: pageSounds, check: pageCheck, map: (el) => mapPage(el, state.doc, go), board: pageBoard, xml: pageXml, test: pageTest })[state.page]?.(p);
 }
 
 /* ---------------------------------------------------------- campos */
@@ -480,7 +481,11 @@ function pageAnimations(p) {
   // a lista, com busca
   const items = h("div", { class: "items" });
   const search = h("input", { type: "text", placeholder: t("anim.search"), value: state.search });
+  // as miniaturas tocam a animação (só as que aparecem na lista)
+  const live = new LiveSet(doc);
+  state.cleanup.push(() => live.stop());
   const fill = () => {
+    live.stop();
     items.textContent = "";
     const q = state.search.trim().toLowerCase();
     const probs = state.problems;
@@ -490,7 +495,7 @@ function pageAnimations(p) {
       const frames = kids(kid(a, "sequence"), "frame");
       const mine = probs.filter((x) => x.anim === id);
       items.append(h("div", { class: "item" + (state.anim === id ? " on" : ""), onclick: () => { state.anim = id; render(); } },
-        thumb(frames.length ? parseInt(frames[0].textContent, 10) || 0 : 0, 36),
+        (() => { const c = h("canvas", { width: 36, height: 36 }); live.add(c, a); return c; })(),
         h("div", { class: "t" }, h("b", { text: name || "—" }), h("small", { text: frames.length === 1 ? t("anim.sub1", id) : t("anim.sub", id, frames.length) })),
         mine.length ? h("span", { class: mine.some((x) => x.error) ? "err" : "warn", text: mine.some((x) => x.error) ? "●" : "▲", title: mine.map((x) => x.text).join("\n") }) : null));
     }
@@ -505,11 +510,52 @@ function pageAnimations(p) {
       { text: t("anim.newModel"), onClick: () => behaviorDialog(doc, (id) => { state.anim = id; render(); }) },
     ]);
   } });
-  wrap.append(h("div", { class: "list" }, h("div", { class: "head" }, h("b", { text: t("anim.count", doc.animations.length) }), search, newBtn), items));
+  const boardBtn = h("button", { class: "btn small", text: "▦ " + t("web.seeAll"), title: t("web.boardIntro"), onclick: () => go("board") });
+  wrap.append(h("div", { class: "list" }, h("div", { class: "head" }, h("b", { text: t("anim.count", doc.animations.length) }), search, h("div", { class: "row2" }, newBtn, boardBtn)), items));
   const a = doc.animById(state.anim) || doc.animations[0];
   if (!a) { wrap.append(h("div")); return; }
   state.anim = +a.getAttribute("id");
   wrap.append(animationEditor(a));
+}
+
+/* ---------------------------------------------------------- Todas as animações: um quadro com todas tocando juntas */
+function pageBoard(p) {
+  const doc = state.doc;
+  p.append(h("h1", { text: t("nav.board") }), h("p", { class: "intro", text: t("web.boardIntro") }));
+  const live = new LiveSet(doc);
+  state.cleanup.push(() => live.stop());
+  const SIZES = [["web.sizeS", 64], ["web.sizeM", 96], ["web.sizeL", 144]];
+  let size = 96;
+  try { size = +localStorage.getItem("deskpals-editor-board") || 96; } catch { /* sem armazenamento */ }
+  const grid = h("div", { class: "board" });
+  const search = h("input", { type: "text", placeholder: t("anim.search"), value: state.search, style: "max-width:260px" });
+  const playBtn = h("button", { class: "btn", onclick: () => { live.play(!live.playing); label(); } });
+  const label = () => { playBtn.textContent = live.playing ? "⏸ " + t("web.pause") : "▶ " + t("web.play"); };
+  label();
+  const sizeSel = h("select", { title: t("web.size"), style: "width:auto" }, ...SIZES.map(([k, v]) => h("option", { value: String(v), text: t(k) })));
+  sizeSel.value = String(SIZES.some(([, v]) => v === size) ? size : 96);
+  const fill = () => {
+    live.stop();
+    grid.textContent = "";
+    grid.style.setProperty("--cell", size + "px");
+    const q = state.search.trim().toLowerCase();
+    for (const a of doc.animations) {
+      const id = +a.getAttribute("id"), name = text(a, "name");
+      if (q && !name.toLowerCase().includes(q) && String(id) !== q) continue;
+      const n = kids(kid(a, "sequence"), "frame").length;
+      const c = h("canvas", { width: size, height: size });
+      grid.append(h("button", { class: "bcard", title: name + " (#" + id + ")", onclick: () => go("animations", id) },
+        c, h("b", { text: name || "—" }), h("small", { text: n === 1 ? t("anim.sub1", id) : t("anim.sub", id, n) })));
+      live.add(c, a);
+    }
+    if (!grid.childElementCount) grid.append(h("p", { class: "hint", text: doc.animations.length ? "—" : t("anim.none") }));
+  };
+  search.addEventListener("input", () => { state.search = search.value; fill(); });
+  sizeSel.addEventListener("change", () => { size = +sizeSel.value; try { localStorage.setItem("deskpals-editor-board", String(size)); } catch { /* fica só nesta visita */ } fill(); });
+  p.append(h("div", { class: "row", style: "margin-bottom:12px;gap:8px;flex-wrap:wrap;align-items:center" },
+    playBtn, h("button", { class: "btn", text: "↻ " + t("web.restartAll"), onclick: () => live.restart() }),
+    h("label", { class: "hint", text: t("web.size") }), sizeSel, search), grid);
+  fill();
 }
 
 function addAnimation() {

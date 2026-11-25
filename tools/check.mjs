@@ -58,7 +58,7 @@ try {
   await evaluate("[...document.querySelectorAll('.popmenu button')].find(b => b.textContent.includes('Português')).click()"); await sleep(300);
   report.lang.after = await evaluate("document.documentElement.lang + ' / ' + document.querySelector('.btn.lang').textContent");
 
-  const pages = ["project", "header", "sheet", "animations", "spawns", "childs", "sounds", "check", "map", "xml", "test"];
+  const pages = ["project", "header", "sheet", "animations", "spawns", "childs", "sounds", "check", "board", "map", "xml", "test"];
   for (const pet of pets) {
     const xml = readFileSync(join(petsDir, pet, "animations.xml"), "utf8");
     const opened = await evaluate(`window.deskpalsEditor.openDoc(${JSON.stringify(xml)}, "animations.xml")`);
@@ -230,6 +230,17 @@ try {
     await sleep(800);
     report.features.gallery = await evaluate(`document.querySelectorAll(".galpet").length`);
     await shot("23-galeria");
+    // as miniaturas da lista e o quadro "Todas as animações" tocam de verdade (a imagem muda com o tempo)
+    await evaluate(`document.querySelector(".modal-x").click()`);
+    const moving = async () => { const a = await evaluate(`[...document.querySelectorAll(SEL)].slice(0, 8).map((c) => c.toDataURL()).join()`.replace("SEL", "'.item canvas'")); await sleep(1500); const b = await evaluate(`[...document.querySelectorAll(SEL)].slice(0, 8).map((c) => c.toDataURL()).join()`.replace("SEL", "'.item canvas'")); return a !== b; };
+    await evaluate(`window.deskpalsEditor.go("animations")`); await sleep(300);
+    report.features.listMoves = await moving();
+    await evaluate(`window.deskpalsEditor.go("board")`); await sleep(1200);
+    report.features.board = await evaluate(`(async () => { const cs = [...document.querySelectorAll(".bcard canvas")]; const a = cs.slice(0, 12).map((c) => c.toDataURL()).join(); await new Promise((r) => setTimeout(r, 1500)); return { cards: cs.length, moves: a !== cs.slice(0, 12).map((c) => c.toDataURL()).join() }; })()`);
+    await shot("23c-todas");
+    await evaluate(`window.deskpalsEditor.go("animations")`);
+    await evaluate(`(async () => { const d = await import("/js/dialogs.js"); d.galleryDialog(() => {}); })()`);
+    for (let i = 0; i < 40; i++) { await sleep(250); if (await evaluate(`document.querySelectorAll(".galpet").length > 0`)) break; }
     // uma fonte nova: o link de um repositório do GitHub (pets.json em Pets/), guardada para a próxima vez
     await evaluate(`[...document.querySelectorAll(".chip.add")][0].click()`);
     await evaluate(`(() => { const i = document.querySelector(".srcadd input"); i.value = "https://github.com/Adrianotiger/desktopPet"; document.querySelector(".srcadd .btn").click(); })()`);

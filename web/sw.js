@@ -1,6 +1,6 @@
 // Guarda os arquivos do editor neste navegador: ele abre e funciona sem internet (a galeria e os links precisam dela).
 // Ao publicar uma versão nova, mude VERSION: os arquivos antigos saem e os novos entram.
-const VERSION = "deskpals-editor-2";
+const VERSION = "deskpals-editor-3";
 const FILES = [
   "./",
   "./index.html",
@@ -16,6 +16,7 @@ const FILES = [
   "./js/files.js",
   "./js/gif.js",
   "./js/i18n.js",
+  "./js/live.js",
   "./js/map.js",
   "./js/pet-engine.js",
   "./js/pixel.js",
