@@ -17,7 +17,7 @@ const ORDER = {
   header: ["author", "title", "petname", "version", "info", "application", "icon"],
   image: ["tilesx", "tilesy", "png", "transparency", "skins"],
   spawn: ["x", "y", "next"],
-  animation: ["name", "start", "end", "sequence", "border", "gravity"],
+  animation: ["name", "start", "end", "sequence", "border", "gravity", "interact"],
   start: ["x", "y", "offsety", "opacity", "interval"],
   end: ["x", "y", "offsety", "opacity", "interval"],
   sequence: ["frame", "next", "action"],

@@ -30,7 +30,7 @@ export function mapPage(p, doc, go) {
   const edges = [];
   for (const a of anims) {
     const from = +a.getAttribute("id");
-    [["sequence", 0], ["border", 1], ["gravity", 2]].forEach(([w, kind]) => {
+    [["sequence", 0], ["border", 1], ["gravity", 2], ["interact", 1]].forEach(([w, kind]) => {
       for (const n of kids(kid(a, w), "next")) { const to = +n.textContent; if (ids.has(to)) edges.push({ from, to, kind }); }
     });
   }

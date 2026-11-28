@@ -90,7 +90,7 @@ export function validate(doc) {
   }
   const byId = new Map();
   for (const a of anims) if (!byId.has(+a.getAttribute("id"))) byId.set(+a.getAttribute("id"), a);
-  const allNext = (a) => nextsOf(kid(a, "sequence")).concat(nextsOf(kid(a, "border")), nextsOf(kid(a, "gravity")));
+  const allNext = (a) => nextsOf(kid(a, "sequence")).concat(nextsOf(kid(a, "border")), nextsOf(kid(a, "gravity")), nextsOf(kid(a, "interact")));
   // toda animação tocada por uma janela filha (ela termina ali de propósito, e pode sair da tela)
   const childAnims = new Set();
   const walk = [...childStarts];
@@ -143,7 +143,7 @@ export function validate(doc) {
 
   // listas em que todas as chances são zero: nada é escolhido nelas
   for (const a of anims) {
-    for (const [el, key] of [[kid(a, "sequence"), "next.end"], [kid(a, "border"), "next.border"], [kid(a, "gravity"), "next.gravity"]]) {
+    for (const [el, key] of [[kid(a, "sequence"), "next.end"], [kid(a, "border"), "next.border"], [kid(a, "gravity"), "next.gravity"], [kid(a, "interact"), "next.interact"]]) {
       const ns = nextsOf(el);
       if (ns.length > 0 && ns.every((n) => n.p <= 0)) W(t("chk.zeroProb", label(a), t(key)), "animations", +a.getAttribute("id"));
     }

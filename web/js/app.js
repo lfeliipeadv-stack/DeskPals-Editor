@@ -708,6 +708,8 @@ function animationEditor(a) {
   box.append(h("div", { class: "card" }, h("h2", { text: t("next.end") }), nextList(a, "sequence"), h("p", { class: "hint", text: t("next.hint") })));
   box.append(h("div", { class: "card" }, h("h2", { text: t("next.border") }), nextList(a, "border")));
   box.append(h("div", { class: "card" }, h("h2", { text: t("next.gravity") }), nextList(a, "gravity")));
+  // desktopPet 2.1: ao encostar em outro pet, reagir ao que ele está fazendo
+  box.append(h("div", { class: "card" }, h("h2", { text: t("next.interact") }), h("p", { class: "hint", text: t("interact.hint") }), nextList(a, "interact")));
 
   // onde ela é usada: quem leva até ela (um clique vai lá)
   box.append(h("div", { class: "card" }, h("h2", { text: t("web.usedBy") }), usesOf(id)));
@@ -724,7 +726,7 @@ function usesOf(id) {
   for (const o of doc.animations) {
     const oid = +o.getAttribute("id");
     if (oid === id) continue;
-    if (["sequence", "border", "gravity"].some((w) => kids(kid(o, w), "next").some((n) => +n.textContent === id)))
+    if (["sequence", "border", "gravity", "interact"].some((w) => kids(kid(o, w), "next").some((n) => +n.textContent === id)))
       item(t("uses.anim", text(o, "name"), oid), () => go("animations", oid));
   }
   for (const s of doc.spawns) if (+text(s, "next") === id) item(t("uses.spawn", s.getAttribute("id")), () => go("spawns"));
@@ -749,10 +751,21 @@ function nextList(a, where) {
       const only = h("select", {}, ...ONLY.map((o) => h("option", { value: o, text: t("only." + o) })));
       only.value = n.getAttribute("only") || "none";
       only.addEventListener("change", () => doc.setAttr(n, "only", only.value));
+      // "quando o outro faz [animação] · [de qualquer lado / na frente / atrás]": o gatilho é uma animação do OUTRO pet
+      const extra = [];
+      if (where === "interact") {
+        const trig = n.getAttribute("trigger");
+        extra.push(h("span", { class: "hint", text: t("interact.when") }),
+          animSelect(parseInt(trig, 10) || 0, (v) => doc.setAttr(n, "trigger", v)));
+        const dir = h("select", {}, ...["any", "infront", "behind"].map((o) => h("option", { value: o, text: t("interact.dir." + o) })));
+        dir.value = n.getAttribute("direction") || "any";
+        dir.addEventListener("change", () => doc.setAttr(n, "direction", dir.value));
+        extra.push(dir);
+      }
       box.append(h("div", { class: "nextrow" },
         animSelect(parseInt(n.textContent, 10) || 0, (v) => doc.change(() => { n.textContent = v; })),
         field(t("web.chance"), n.getAttribute("probability") || "100", (v) => doc.setAttr(n, "probability", Math.max(0, parseInt(v, 10) || 0)), { small: true, type: "number", title: t("web.chance") }),
-        only,
+        only, ...extra,
         h("button", { class: "btn small danger", text: "×", title: t("web.remove"), onclick: () => {
           doc.change(() => {
             const parent = n.parentNode;
@@ -769,6 +782,7 @@ function nextList(a, where) {
         const el = doc.make("next", a.getAttribute("id"));
         el.setAttribute("probability", "100");
         el.setAttribute("only", "none");
+        if (where === "interact") { el.setAttribute("trigger", a.getAttribute("id")); el.setAttribute("direction", "any"); }
         doc.insertOrdered(parent, el);
       });
       fill();
@@ -798,14 +812,14 @@ function deleteAnimation(a) {
   const doc = state.doc;
   const id = a.getAttribute("id"), name = text(a, "name");
   const users = [];
-  for (const o of doc.animations) for (const w of ["sequence", "border", "gravity"]) for (const n of kids(kid(o, w), "next"))
+  for (const o of doc.animations) for (const w of ["sequence", "border", "gravity", "interact"]) for (const n of kids(kid(o, w), "next"))
     if (n.textContent.trim() === id && o !== a) users.push(`“${text(o, "name")}” (#${o.getAttribute("id")})`);
   const ask = users.length ? t("anim.deleteUsed", name, [...new Set(users)].join("\n• ")) : t("anim.deleteAsk", name);
   if (!confirm(ask)) return;
   doc.change(() => {
     doc.removeEl(a);
     // ela sai também das listas de próximas, dos sons e das janelas filhas
-    for (const o of doc.animations) for (const w of ["sequence", "border", "gravity"]) {
+    for (const o of doc.animations) for (const w of ["sequence", "border", "gravity", "interact"]) {
       const parent = kid(o, w);
       for (const n of kids(parent, "next")) if (n.textContent.trim() === id) doc.removeEl(n);
       if (parent && w !== "sequence" && !kids(parent, "next").length) doc.removeEl(parent);
